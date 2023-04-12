@@ -1,0 +1,437 @@
+﻿<Window x:Class="WPFToDolist.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFToDolist"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:mw="clr-namespace:WPFToDolist.VievModel"
+        mc:Ignorable="d"
+        Height="720"
+        Width="1025"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown">
+    <Window.DataContext>
+        <mw:TasksViewModels />
+    </Window.DataContext>
+    <Window.Resources>
+
+        <Style x:Key="MyComboBoxStyle"
+               TargetType="ComboBox">
+            <Setter Property="Background"
+                    Value="LightBlue" />
+            <Setter Property="Foreground"
+                    Value="DarkBlue" />
+            <Setter Property="FontSize"
+                    Value="18" />
+        </Style>
+
+        <Style x:Key="buttonStyle"
+               TargetType="Button">
+            <Setter Property="FontSize"
+                    Value="16" />
+            <Setter Property="FontFamily"
+                    Value="Monserat" />
+            <Setter Property="Margin"
+                    Value="5" />
+            <Setter Property="Width"
+                    Value="90" />
+            <Setter Property="Height"
+                    Value="30" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+            <Setter Property="VerticalAlignment"
+                    Value="top" />
+            <Setter Property="Background"
+                    Value="{StaticResource ButtonMnz1}" />
+            <Setter Property="Foreground"
+                    Value="DarkGray" />
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource ButtonMnz1}" />
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius"
+                            Value="10" />
+                    <Setter Property="BorderBrush"
+                            Value="BlanchedAlmond" />
+                    <Setter Property="BorderThickness"
+                            Value="5" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{StaticResource ButtonMnz2}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Style.Resources>
+        </Style>
+        <BooleanToVisibilityConverter x:Key="bollToVisibility" />
+        <local:Converters x:Key="isDoneToBrush" />
+        <local:TaskConverter x:Key="makeTask" />
+    </Window.Resources>
+
+    <Border CornerRadius="50">
+        <Border.Background>
+            <ImageBrush ImageSource="/Images/tlo.png" />
+        </Border.Background>
+        <Border CornerRadius="20"
+                BorderThickness="3,3,3,3"
+                Opacity="0.95">
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,1">
+                    <GradientStop Color="{StaticResource BorderColor1}"
+                                  Offset="0.5" />
+                    <GradientStop Color="{StaticResource BorderColor2}"
+                                  Offset="1" />
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+
+
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,1"
+                                     EndPoint="1,0">
+                    <GradientStop Color="{StaticResource BackColor1}"
+                                  Offset="0" />
+                    <GradientStop Color="{StaticResource BackColor2}"
+                                  Offset="1.5" />
+                </LinearGradientBrush>
+            </Border.Background>
+
+            <Grid>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="25" />
+                            <ColumnDefinition Width="25" />
+                            <ColumnDefinition Width="1" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="To Do List"
+                                   Foreground="DarkGray"
+                                   FontSize="20"
+                                   FontFamily="Montserrat"
+                                   Grid.Column="0"
+                                   VerticalAlignment="Center"
+                                   Margin="15,0,0,0"
+                                   IsEnabled="False" />
+
+                        <Button x:Name="btnMinimize"
+                                BorderThickness="0"
+                                Content="-"
+                                Foreground="White"
+                                FontSize="20"
+                                FontFamily="Montserrat"
+                                Cursor="Hand"
+                                Grid.Column="1"
+                                Click="BtnMinimize_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background"
+                                            Value="{StaticResource ButtonMnz1}" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="{StaticResource ButtonMnz2}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Width="22"
+                                            Height="22"
+                                            CornerRadius="9"
+                                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center"
+                                                          HorizontalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <Button x:Name="btnClose"
+                                Content="X" 
+                                Command="{Binding Save}"
+                                BorderThickness="0"
+                                
+                                Foreground="White"
+                                FontSize="10"
+                                FontFamily="Montserrat"
+                                Cursor="Hand"
+                                Grid.Column="2"
+                                Click="BtnClose_Click">
+
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background"
+                                            Value="{StaticResource ButtonCls1}" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="{StaticResource ButtonCls2}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Width="22"
+                                            Height="22"
+                                            CornerRadius="9"
+                                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center"
+                                                          HorizontalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Border CornerRadius="20"
+                        BorderThickness="3,3,3,3"
+                        Opacity="0.95"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Height="650">
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,1">
+                            <GradientStop Color="{StaticResource BorderColor1}"
+                                          Offset="0.5" />
+                            <GradientStop Color="{StaticResource BorderColor2}"
+                                          Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+
+
+                    <StackPanel Name="stackPanel1"
+                                Width="990"
+                                Height="550">
+                        <TextBlock Text="Your task:"
+                                   Foreground="DarkGray"
+                                   FontSize="22"
+                                   FontWeight="Medium"
+                                   FontFamily="Montserrat"
+                                   Width="965"><Run Text="{Binding TasksList.Count, Mode=OneWay}" /></TextBlock>
+                        <ListBox x:Name="TaskList"
+                                 Background="Transparent"
+                                 Foreground="DarkGray"
+                                 FontSize="18"
+                                 FontFamily="Monserat"
+                                 ItemsSource="{Binding TasksList}"
+                                 Height="250">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+
+                                    <StackPanel Orientation="Vertical"
+                                                Margin="3">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Duty, Mode=OneWay}"
+                                                       FontSize="20"
+                                                       Margin="5,5,5,5" />
+                                            <TextBlock Text="{Binding Date, Mode=OneWay}"
+                                                       FontSize="20"
+                                                       Margin="5,5,5,5" />
+                                            <TextBlock Text="{Binding Priority, Mode=OneWay}"
+                                                       FontSize="20"
+                                                       Margin="5,5,5,5" />
+
+                                            <Button Content="Done"
+                                                    Command="{Binding MarkAsDone}"
+                                                    Style="{StaticResource buttonStyle}"
+                                                    Visibility="{Binding IsEnabled, Converter={StaticResource bollToVisibility}, Mode=OneWay, RelativeSource={RelativeSource Self}}" />
+                                            <Button Content="Undone"
+                                                    Command="{Binding MarkAsUnDone}"
+                                                    Style="{StaticResource buttonStyle}"
+                                                    Visibility="{Binding IsEnabled, Converter={StaticResource bollToVisibility}, Mode=OneWay, RelativeSource={RelativeSource Self}}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+
+                        </ListBox>
+
+                        <!--<TextBlock>
+                            <Run Text="{Binding Path=}"
+                        PAMIETAJ ZEBY TU WSADZIC DATE UTOWRZENIA I TE KOLORKI FAJNE!!!!
+                        </TextBlock>-->
+                    </StackPanel>
+                </Border>
+                <Button Content="Delete Task"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Margin="878,0,0,160"
+                        Style="{StaticResource buttonStyle}"
+                        FontSize="18"
+                        FontWeight="Medium"
+                        Width="100"
+                        Height="35"
+                        Background="{StaticResource ButtonMnz1}"
+                        Command="{Binding DeleteTask}"
+                        CommandParameter="{Binding ElementName=TaskList, Path=SelectedIndex}">
+
+                </Button>
+                <GroupBox Header="New Task"
+                          FontSize="16"
+                          FontWeight="Medium"
+                          Foreground="DarkGray"
+                          Margin="25,439,25,0"
+                          MinWidth="220"
+                          MinHeight="100"
+                          VerticalAlignment="Top"
+                          Height="152">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="359*" />
+                            <ColumnDefinition Width="599*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Description:"
+                               Margin="10,13,0,0"
+                               Foreground="DarkGray"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top" />
+                        <TextBox x:Name="tbDescription"
+                                 Height="27"
+                                 Margin="112,15,385,0"
+                                 VerticalAlignment="Top"
+                                 Width="470"
+                                 Grid.ColumnSpan="2" 
+                                 Text ="{Binding Path=NewDuty}"/>
+                        <Label Content="Priority:"
+                               Margin="25,0,0,42"
+                               Foreground="DarkGray"
+                               HorizontalAlignment="Left"                             
+                               VerticalAlignment="Bottom" />
+                        <ComboBox x:Name="cbPriority"
+                                  SelectedIndex="{Binding NewPriority}"
+                                  Margin="112,55,0,45"
+                                  HorizontalAlignment="Left"
+                                  Width="148"
+                                  Height="25">
+
+                            <ComboBoxItem>
+                                Low Priority
+                            </ComboBoxItem>
+
+                            <ComboBoxItem IsSelected="True">
+                                Medium Priority
+                            </ComboBoxItem>
+
+                            <ComboBoxItem>
+                                High Priority
+                            </ComboBoxItem>
+                        </ComboBox>
+                        <Label Content="Date:"
+                               Margin="295,50,0,0"
+                               Foreground="DarkGray"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top" />
+                        <DatePicker x:Name="dpDate"
+                                    Margin="10,51,439,44"
+                                    SelectedDate="{Binding Path=NewDate}"
+                                    Grid.Column="1" />
+                        <Button Content="Add Task"
+                                Margin="0,7,10,82"
+                                Width="100"
+                                Height="NaN"
+                                FontSize="18"
+                                FontWeight="Medium"
+                                Style="{StaticResource buttonStyle}"
+                                Background="{StaticResource ButtonMnz1}"
+                                Command="{Binding AddTask}"
+                                Grid.Column="1"
+                                VerticalAlignment="Stretch">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource makeTask}">
+                                    <Binding ElementName="tbDescription"
+                                             Path="Text" />
+                                    <Binding ElementName="dpDate"
+                                             Path="SelectedDate" />
+                                    <Binding ElementName="cbPriority"
+                                             Path="SelectedIndex" />
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button Content="Edit Task"
+                                Margin="0,7,130,82"
+                                Width="100"
+                                Height="NaN"
+                                FontSize="18"
+                                FontWeight="Medium"
+                                Style="{StaticResource buttonStyle}"
+                                Background="{StaticResource ButtonMnz1}"
+                                Command="{Binding EditTask}"
+                                CommandParameter="{Binding ElementName=TaskList, Path=SelectedIndex}"
+                                Grid.Column="1"
+                                VerticalAlignment="Stretch">
+                        </Button>
+                    </Grid>
+                </GroupBox>
+
+                <ComboBox ItemsSource="{Binding SortOptions}"
+                          SelectedItem="{Binding SelectedSortOption}"
+                          DisplayMemberPath="Name"
+                          Width="160"
+                          Height="25"
+                          VerticalAlignment="Top"
+                          HorizontalAlignment="Right"
+                          Margin="40,40,25,40">
+
+                    <ComboBox.Resources>
+                        <Style TargetType="{x:Type ComboBoxItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                                        <Border x:Name="Bd"
+                                                Background="{StaticResource ButtonMnz1}"
+                                                BorderBrush="NavajoWhite"
+                                                BorderThickness="1"
+                                                Padding="{TemplateBinding Padding}"
+                                                SnapsToDevicePixels="true">
+                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsHighlighted"
+                                                     Value="true">
+                                                <Setter TargetName="Bd"
+                                                        Property="Background"
+                                                        Value="#483D8B" />
+                                                <Setter TargetName="Bd"
+                                                        Property="BorderBrush"
+                                                        Value="#483D8B" />
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled"
+                                                     Value="false">
+                                                <Setter Property="Foreground"
+                                                        Value="#483D8B" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ComboBox.Resources>
+                </ComboBox>
+            </Grid>
+        </Border>
+    </Border>
+</Window>

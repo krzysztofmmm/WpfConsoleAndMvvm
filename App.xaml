@@ -1,0 +1,11 @@
+﻿<Application x:Class="WPFToDolist.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WPFToDolist"
+             StartupUri="View/StartingScreen.xaml">
+    <Application.Resources>
+
+        <ResourceDictionary Source="/ColorStyles/ColorPalette.xaml"/>
+
+    </Application.Resources>
+</Application>
