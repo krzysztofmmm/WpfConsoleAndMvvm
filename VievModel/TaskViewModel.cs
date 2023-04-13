@@ -10,7 +10,7 @@ namespace WPFToDolist.VievModel
     {
         //TA KLASA JEST DO OBLSUGI POJEDYNCZEGO WYBRANEGO ZADANIA, NP DO EDYCJI!!!!!
 
-        private readonly ToDoLogic.Model.TaskModel model;
+        private ToDoLogic.Model.TaskModel model;
 
         #region properties
         public string Duty
@@ -79,7 +79,10 @@ namespace WPFToDolist.VievModel
             model = new TaskModel(duty , creationDate , date , priority , isDone);
         }
 
-
+        public TaskViewModel(TaskViewModel taskModel)
+        {
+            TaskModel = taskModel;
+        }
 
         public TaskModel GetModel()
         {
@@ -135,6 +138,8 @@ namespace WPFToDolist.VievModel
                 return markAsUnDone;
             }
         }
+
+        public TaskViewModel TaskModel { get; }
         #endregion
     }
 }

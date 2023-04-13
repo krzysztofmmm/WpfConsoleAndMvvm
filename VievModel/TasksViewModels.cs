@@ -51,16 +51,7 @@ namespace WPFToDolist.VievModel
             TasksList = WpfFileWR.DeserializeObs<TaskViewModel>("tasks.json");
         }
 
-        private void CopyTasksFromModel()
-        {
-            TasksList.Clear();
-            TasksList.CollectionChanged -= ModelSync;
-            foreach(TaskModel taskModel in model)
-            {
-                TasksList.Add(new TaskViewModel(taskModel));
-            }
-            TasksList.CollectionChanged += ModelSync;
-        }
+
 
         public TasksViewModels()
         {
@@ -73,7 +64,17 @@ namespace WPFToDolist.VievModel
                 return;
             }
         }
-
+        #region do przemyslenia
+        private void CopyTasksFromModel()
+        {
+            TasksList.Clear();
+            TasksList.CollectionChanged -= ModelSync;
+            foreach(TaskModel taskModel in model)
+            {
+                TasksList.Add(new TaskViewModel(taskModel));
+            }
+            TasksList.CollectionChanged += ModelSync;
+        }
         public void ModelSync(object? sender , NotifyCollectionChangedEventArgs e)
         {
             switch(e.Action)
@@ -95,7 +96,7 @@ namespace WPFToDolist.VievModel
                     break;
             }
         }
-
+        #endregion
 
         private ICommand save;
         public ICommand Save
@@ -249,7 +250,7 @@ namespace WPFToDolist.VievModel
                       task.GetModel().Date = NewDate;
                       task.GetModel().Duty = NewDuty;
                       task.GetModel().Priority = NewPriority;
-                      CopyTasksFromModel();
+
                   } ,
                   o =>
                   {
