@@ -38,10 +38,7 @@ namespace WPFToDolist
             Application.Current.Shutdown();
         }
 
-        private void TaskList_SelectionChanged(object sender , System.Windows.Controls.SelectionChangedEventArgs e)
-        {
 
-        }
 
     }
 }
